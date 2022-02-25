@@ -35,4 +35,32 @@ describe(`#${AuthenticationService.name}`, () => {
     }
   });
 
+  it(`#${AuthenticationService.prototype.validatePassowrdStrength} Should return true if password strentgh is good`, () => {
+    const listOfPasswords = [
+      'senha123',
+      'A123456',
+      '/*123456a',
+    ];
+    listOfPasswords.forEach(password => {
+      const isPassordStrengthGood = service.validatePassowrdStrength(password);
+      expect(isPassordStrengthGood)
+        .withContext(`Password strentgh ${password} is week`)
+        .toBeTrue();
+    })
+  });
+
+  it(`#${AuthenticationService.prototype.validatePassowrdStrength} Should return false if password strentgh is week`, () => {
+    const listOfPasswords = [
+      'senhaasdasd',
+      '123456',
+      '/*123',
+    ];
+    listOfPasswords.forEach(password => {
+      const isPassordStrengthGood = service.validatePassowrdStrength(password);
+      expect(isPassordStrengthGood)
+        .withContext(`Password strentgh ${password} is good`)
+        .toBeFalse();
+    })
+  });
+
 });
