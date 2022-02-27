@@ -1,23 +1,20 @@
 import { AccountModel } from "../models/account-model";
 import { AuthenticationParams } from "../useCases/authentication";
 
-export const mockBodyRegister: AuthenticationParams = {
-  firstname: 'nameFake',
-  email: 'emailFake@example.com',
-  password: '123456'
-};
-
 export const mockBodyLogin: AuthenticationParams = {
   email: 'emailFake@example.com',
-  password: '123456'
+  password: '123456asd1s'
+};
+
+export const mockBodyRegister: AuthenticationParams = {
+  ...mockBodyLogin,
+  firstname: 'fakeName',
 };
 
 export const httpResult: AccountModel = {
   accessToken: '12213asdasd13311233',
   user: {
-    firstname: 'nameFake',
-    email: 'emailFake@example.com',
-    password: '123456',
+    ...mockBodyRegister,
     id: '1'
   }
 }
