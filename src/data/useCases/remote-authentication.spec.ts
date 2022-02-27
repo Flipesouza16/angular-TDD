@@ -21,8 +21,8 @@ const makeSut = (url: string = 'url-fake/users'): SutTypes => {
 };
 
 const mockBodyRegister: AuthenticationParams = {
-  name: 'nameFake',
-  email: 'nameFake@example.com',
+  firstname: 'nameFake',
+  email: 'emailFake@example.com',
   password: '123456'
 };
 
@@ -32,7 +32,13 @@ const mockBodyLogin: AuthenticationParams = {
 };
 
 const httpResult: AccountModel = {
-  accessToken: '12213asdasd13311233'
+  accessToken: '12213asdasd13311233',
+  user: {
+    firstname: 'nameFake',
+    email: 'emailFake@example.com',
+    password: '123456',
+    id: '1'
+  }
 }
 
 describe(`#${RemoteAuthentication.name}`, () => {
@@ -92,9 +98,24 @@ describe(`#${RemoteAuthentication.name}`, () => {
       statusCode: HttpStatusCode.ok,
       body: httpResult,
     }
-    const account = await sut.auth(mockBodyLogin);
-    expect(account).toBe(httpResult)
+    const account: AccountModel = await sut.auth(mockBodyLogin);
+    expect(account).toBe(httpResult);
   });
+
+  it('Should return the same user used to login', async () => {
+    const { httpPostClientSpy, sut } = makeSut();
+    httpPostClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: httpResult
+    };
+
+    const account: AccountModel = await sut.auth(mockBodyLogin);
+    const accountUserFormatted: AuthenticationParams = {
+      email: account.user.email,
+      password: account.user.password
+    }
+    expect(accountUserFormatted).toEqual(mockBodyLogin);
+  })
 
   it('Should return an AccountModel if HttpPostClient returns 201', async () => {
     const { httpPostClientSpy, sut } = makeSut();
@@ -102,7 +123,29 @@ describe(`#${RemoteAuthentication.name}`, () => {
       statusCode: HttpStatusCode.registerd,
       body: httpResult,
     }
-    const account = await sut.auth(mockBodyRegister);
-    expect(account).toBe(httpResult)
+    const account: AccountModel = await sut.auth(mockBodyRegister);
+    const accountUserFormatted: AuthenticationParams = {
+      firstname: account.user.firstname,
+      email: account.user.email,
+      password: account.user.password
+    }
+    expect(account).toBe(httpResult);
+    expect(accountUserFormatted).toEqual(mockBodyRegister);
+  });
+
+  it('Should return the same user used for registration', async () => {
+    const { httpPostClientSpy, sut } = makeSut();
+    httpPostClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: httpResult
+    };
+
+    const account: AccountModel = await sut.auth(mockBodyRegister);
+    const accountUserFormatted: AuthenticationParams = {
+      firstname: account.user.firstname,
+      email: account.user.email,
+      password: account.user.password
+    }
+    expect(accountUserFormatted).toEqual(mockBodyRegister);
   });
 })
