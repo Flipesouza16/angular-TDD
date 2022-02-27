@@ -1,6 +1,7 @@
 import { InvalidCredentialsError } from "src/domain/error/invalid-credentials-error";
 import { UnexpectedError } from "src/domain/error/unexpected-error";
 import { AccountModel } from "src/domain/models/account-model";
+import { httpResult, mockBodyLogin, mockBodyRegister } from "src/domain/test/mock-account";
 import { AuthenticationParams } from "src/domain/useCases/authentication";
 import { HttpStatusCode } from "../protocols/http/http-response";
 import { HttpPostClientSpy } from "../test/mock-http-client";
@@ -19,27 +20,6 @@ const makeSut = (url: string = 'url-fake/users'): SutTypes => {
     httpPostClientSpy,
   };
 };
-
-const mockBodyRegister: AuthenticationParams = {
-  firstname: 'nameFake',
-  email: 'emailFake@example.com',
-  password: '123456'
-};
-
-const mockBodyLogin: AuthenticationParams = {
-  email: 'emailFake@example.com',
-  password: '123456'
-};
-
-const httpResult: AccountModel = {
-  accessToken: '12213asdasd13311233',
-  user: {
-    firstname: 'nameFake',
-    email: 'emailFake@example.com',
-    password: '123456',
-    id: '1'
-  }
-}
 
 describe(`#${RemoteAuthentication.name}`, () => {
   it('Should call HttpPostClient with correct url', async () => {
