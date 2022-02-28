@@ -7,7 +7,7 @@ import { HttpStatusCode } from "../protocols/http/http-response";
 import { HttpPostClientSpy } from "../test/mock-http-client";
 import { RemoteAuthentication } from "./remote-authentication";
 
-type SutTypes = {
+export type SutTypes = {
   sut: RemoteAuthentication
   httpPostClientSpy: HttpPostClientSpy<AuthenticationParams, AccountModel>
 };
