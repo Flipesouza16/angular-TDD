@@ -1,68 +1,31 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpPostClientSpy } from 'src/data/test/mock-http-client';
-import { RemoteAuthentication } from 'src/data/useCases/remote-authentication';
-import { AccountModel } from 'src/domain/models/account-model';
 import { mockBodyRegister, mockBodyLogin } from 'src/domain/test/mock-account';
-import { AuthenticationParams } from 'src/domain/useCases/authentication';
 import { AuthenticationService } from './authentication.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { AccountModel } from 'src/domain/models/account-model';
 
-type SutTypes = {
-  sut: RemoteAuthentication
-  httpPostClientSpy: HttpPostClientSpy<AuthenticationParams, AccountModel>
-}
-
-type CheckedFieldsType = {
-  isAllFieldsFilledAndValidated: boolean
-  fieldInvalid: string
-}
-
-const makeSut = (url: string): SutTypes => {
-  const httpPostClientSpy = new HttpPostClientSpy<AuthenticationParams, AccountModel>();
-  const sut = new RemoteAuthentication(url, httpPostClientSpy);
-  return {
-    sut,
-    httpPostClientSpy
-  }
-}
-
-const verifyAllFields = (service: AuthenticationService, mockBody: typeof mockBodyLogin | typeof mockBodyRegister, isLogin = false): CheckedFieldsType => {
-  let fieldInvalid: any;
-  let isNameFilled
-  let isValidEmail
-  let isPasswordStrengthGood
-  let name: string | undefined;
-  let { email, password } = mockBody;
-
-  if(!isLogin) {
-    const { firstname } = mockBody;
-    name = firstname;
-  }
-
-  !isLogin && name?.length ? isNameFilled = true : isNameFilled = name;
-  service.validateEmail(email) ? isValidEmail = true : fieldInvalid = email;
-  service.validatePassowrdStrength(password) ? isPasswordStrengthGood = true : fieldInvalid = password;
-
-  const listOfFields = [
-    isNameFilled, isValidEmail, isPasswordStrengthGood
-  ]
-  if(isLogin) {
-    listOfFields.shift();
-  }
-
-  let isAllFieldsFilledAndValidated = true;
-  listOfFields.forEach(field => { if(!field) isAllFieldsFilledAndValidated = false } );
-
-  return {
-    isAllFieldsFilledAndValidated,
-    fieldInvalid
+const mockedApi: AccountModel = {
+  accessToken: 'as1d3a1sa3s2d1',
+  user: {
+    email: 'email@example.com',
+    password: '123456',
+    firstname: 'fakeName',
+    id: '1'
   }
 }
 
 describe(`#${AuthenticationService.name}`, () => {
   let service: AuthenticationService;
+  let httpController: HttpTestingController;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [AuthenticationService]
+    }).compileComponents();
+
     service = TestBed.inject(AuthenticationService);
+    httpController = TestBed.inject(HttpTestingController);
   });
 
   it(`#${AuthenticationService.name} should be created`, () => {
@@ -119,17 +82,43 @@ describe(`#${AuthenticationService.name}`, () => {
     })
   });
 
-  it(`#${AuthenticationService.prototype.register} Should return true if all field are filled and validated`, () => {
-    const { fieldInvalid, isAllFieldsFilledAndValidated } = verifyAllFields(service, mockBodyRegister);
+  it(`#${AuthenticationService.prototype.verifyAllField} Should return true if all field of register are filled and validated`, () => {
+    const { fieldInvalid, isAllFieldsFilledAndValidated } = service.verifyAllField(mockBodyRegister);
     expect(isAllFieldsFilledAndValidated)
       .withContext(`The value ${fieldInvalid} is invalid`)
       .toBeTrue();
   })
 
-  it(`#${AuthenticationService.prototype.login} Should return true if all field are filled and validated`, () => {
-    const { fieldInvalid, isAllFieldsFilledAndValidated } = verifyAllFields(service, mockBodyLogin, true);
+  it(`#${AuthenticationService.prototype.verifyAllField} Should return true if all field of login are filled and validated`, () => {
+    const { fieldInvalid, isAllFieldsFilledAndValidated } = service.verifyAllField(mockBodyLogin);
     expect(isAllFieldsFilledAndValidated)
       .withContext(`The value ${fieldInvalid} is invalid`)
       .toBeTrue();
+  })
+
+  it(`# Should call the verifyAllField function before the HttpPostClient`, done => {
+    const url = 'http://localhost:3000/users'
+
+    service.register(mockBodyRegister).subscribe(response => {
+      done();
+    })
+
+    expect(service.checkedFields).toBeTrue();
+
+    httpController
+      .expectOne(url)
+      .flush(mockedApi)
+  })
+
+  it(`#${AuthenticationService.prototype.register} Should return the user and accessToken if the registration is successful`, done => {
+    const url = 'http://localhost:3000/users'
+    service.register(mockBodyRegister).subscribe(response => {
+      expect(response).toBe(mockedApi)
+      done();
+    })
+
+    httpController
+      .expectOne(url)
+      .flush(mockedApi)
   })
 });
