@@ -4,7 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AccountModel } from 'src/domain/models/account-model';
 import { HttpResponse } from 'src/data/protocols/http/http-response';
-import { mockPostRequest } from 'src/data/test/mock-http-post';
+import { mockPostLoginRequest, mockPostRegisterRequest } from 'src/data/test/mock-http-post';
 
 const mockedApiResult: HttpResponse<AccountModel> = {
   body: {
@@ -107,8 +107,7 @@ describe(`#${AuthenticationService.name}`, () => {
   })
 
   it(`#${AuthenticationService.prototype.register} Should return the user and accessToken if the registration is successful`, done => {
-    const request = mockPostRequest();
-    service.endPoint = request.url;
+    const requestRegister = mockPostRegisterRequest();
 
     service.register(mockBodyRegister).then(data => {
       expect(data).toBe(mockedApiResult)
@@ -116,7 +115,7 @@ describe(`#${AuthenticationService.name}`, () => {
     })
 
     httpController
-      .expectOne(request.url)
+      .expectOne(requestRegister.url)
       .flush(mockedApiResult)
   })
 
@@ -124,5 +123,18 @@ describe(`#${AuthenticationService.name}`, () => {
     service.login(mockBodyLogin);
     expect(service.checkedFields).toBeTrue()
     done();
+  })
+
+  it(`#${AuthenticationService.prototype.login} Should return the user and accessToken if the login is successful`, done => {
+    const requestLogin = mockPostLoginRequest();
+
+    service.login(mockBodyLogin).then(data => {
+      expect(data).toBe(mockedApiResult)
+      done();
+    })
+
+    httpController
+      .expectOne(requestLogin.url)
+      .flush(mockedApiResult)
   })
 });
