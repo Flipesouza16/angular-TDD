@@ -3,14 +3,18 @@ import { mockBodyRegister, mockBodyLogin } from 'src/domain/test/mock-account';
 import { AuthenticationService } from './authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AccountModel } from 'src/domain/models/account-model';
+import { HttpResponse } from 'src/data/protocols/http/http-response';
+import { mockPostRequest } from 'src/data/test/mock-http-post';
 
-const mockedApi: AccountModel = {
-  accessToken: 'as1d3a1sa3s2d1',
-  user: {
-    email: 'email@example.com',
-    password: '123456',
-    firstname: 'fakeName',
-    id: '1'
+const mockedApiResult: HttpResponse<AccountModel> = {
+  body: {
+    accessToken: 'as1d3a1sa3s2d1',
+    user: {
+      email: 'email@example.com',
+      password: '123456',
+      firstname: 'fakeName',
+      id: '1'
+    }
   }
 }
 
@@ -96,29 +100,29 @@ describe(`#${AuthenticationService.name}`, () => {
       .toBeTrue();
   })
 
-  it(`# Should call the verifyAllField function before the HttpPostClient`, done => {
-    const url = 'http://localhost:3000/users'
-
-    service.register(mockBodyRegister).subscribe(response => {
-      done();
-    })
-
-    expect(service.checkedFields).toBeTrue();
-
-    httpController
-      .expectOne(url)
-      .flush(mockedApi)
+  it(`# Should call the verifyAllField function before the HttpPostClient Register function`, done => {
+    service.register(mockBodyRegister);
+    expect(service.checkedFields).toBeTrue()
+    done();
   })
 
   it(`#${AuthenticationService.prototype.register} Should return the user and accessToken if the registration is successful`, done => {
-    const url = 'http://localhost:3000/users'
-    service.register(mockBodyRegister).subscribe(response => {
-      expect(response).toBe(mockedApi)
+    const request = mockPostRequest();
+    service.endPoint = request.url;
+
+    service.register(mockBodyRegister).then(data => {
+      expect(data).toBe(mockedApiResult)
       done();
     })
 
     httpController
-      .expectOne(url)
-      .flush(mockedApi)
+      .expectOne(request.url)
+      .flush(mockedApiResult)
+  })
+
+  it(`# Should call the verifyAllField function before the HttpPostClient Login function`, done => {
+    service.login(mockBodyLogin);
+    expect(service.checkedFields).toBeTrue()
+    done();
   })
 });
