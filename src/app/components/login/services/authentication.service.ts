@@ -3,6 +3,7 @@ import { AuthenticationParams } from 'src/domain/useCases/authentication';
 import { CheckedFieldsType } from '../interfaces/authentication-validation';
 import { HttpClientService } from 'src/infra/http-client-service';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 enum AuthenticationFields {
   firstName = 'firstname',
@@ -15,24 +16,32 @@ enum AuthenticationFields {
 })
 
 export class AuthenticationService {
-  authentication: AuthenticationParams = {
+  public authentication: AuthenticationParams = {
     email: '',
     password: '',
   };
-  endPoint = 'http://localhost:3000/users'
-
-  checkedFields = false;
+  public endPoint = '/users';
+  public checkedFields = false;
 
   constructor(private httpClientService: HttpClientService) {}
 
-  login() {}
-
-  register(params: AuthenticationParams): Observable<any> {
+  async login(params: AuthenticationParams): Promise<any> {
     const { fieldInvalid, isAllFieldsFilledAndValidated } = this.verifyAllField(params);
     if(isAllFieldsFilledAndValidated) {
-      return this.httpClientService.post({ url: this.endPoint, body: params });
+      const { body } = await this.httpClientService.post({ url: environment.BASE_URL + this.endPoint, body: params });
+      return body;
     } else {
-      throw Error(fieldInvalid)
+      throw Error(fieldInvalid);
+    }
+  }
+
+  async register(params: AuthenticationParams): Promise<any> {
+    const { fieldInvalid, isAllFieldsFilledAndValidated } = this.verifyAllField(params);
+    if(isAllFieldsFilledAndValidated) {
+      const { body } = await this.httpClientService.post({ url: this.endPoint, body: params });
+      return body;
+    } else {
+      throw Error(fieldInvalid);
     }
   }
 
