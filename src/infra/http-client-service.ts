@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { HttpPostClient, HttpPostParams } from "src/data/protocols/http/http-post-client";
 import { HttpResponse } from "src/data/protocols/http/http-response";
 import { AccountModel } from "src/domain/models/account-model";
+import { environment } from "src/environments/environment";
 @Injectable({
   providedIn: 'root',
 })
@@ -13,7 +14,7 @@ export class HttpClientService implements HttpPostClient<any, any> {
 
   post(params: HttpPostParams<any>): Promise<HttpResponse<AccountModel>> {
     return new Promise(resolve => {
-      this.http.post(params.url, params.body).subscribe((data: any) => {
+      this.http.post(environment.BASE_URL + params.url, params.body).subscribe((data: any) => {
         resolve({
           body: data
         });

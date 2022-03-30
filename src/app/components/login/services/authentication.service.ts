@@ -20,7 +20,10 @@ export class AuthenticationService {
     email: '',
     password: '',
   };
-  public endPoint = '/users';
+  public endPoint = {
+    login: '/login',
+    register: '/users'
+  };
   public checkedFields = false;
 
   constructor(private httpClientService: HttpClientService) {}
@@ -28,7 +31,7 @@ export class AuthenticationService {
   async login(params: AuthenticationParams): Promise<any> {
     const { fieldInvalid, isAllFieldsFilledAndValidated } = this.verifyAllField(params);
     if(isAllFieldsFilledAndValidated) {
-      const { body } = await this.httpClientService.post({ url: environment.BASE_URL + this.endPoint, body: params });
+      const { body } = await this.httpClientService.post({ url: this.endPoint.login, body: params });
       return body;
     } else {
       throw Error(fieldInvalid);
@@ -38,7 +41,7 @@ export class AuthenticationService {
   async register(params: AuthenticationParams): Promise<any> {
     const { fieldInvalid, isAllFieldsFilledAndValidated } = this.verifyAllField(params);
     if(isAllFieldsFilledAndValidated) {
-      const { body } = await this.httpClientService.post({ url: this.endPoint, body: params });
+      const { body } = await this.httpClientService.post({ url: this.endPoint.register, body: params });
       return body;
     } else {
       throw Error(fieldInvalid);

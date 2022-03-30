@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { HttpResponse } from "src/data/protocols/http/http-response";
-import { mockPostRequest } from "src/data/test/mock-http-post";
+import { mockPostRegisterRequest } from "src/data/test/mock-http-post";
 import { AccountModel } from "src/domain/models/account-model";
 import { HttpClientService } from "./http-client-service";
 
@@ -42,7 +42,7 @@ describe(`#${HttpClientService.name}`, () => {
   })
 
   it('Should return the accessToken and body', async done => {
-    const request = mockPostRequest();
+    const request = mockPostRegisterRequest();
     const { mockedApiResult, sut } = makeSut();
 
     spyOn(sut, 'post').and.returnValue(Promise.resolve(mockedApiResult));
