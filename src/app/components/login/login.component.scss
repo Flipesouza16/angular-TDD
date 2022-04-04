@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .form {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+
+    .container-fields {
+      display: flex;
+      flex-direction: column;
+      width: 400px;
+      padding: 40px;
+      border-radius: 8px;
+      background-color: #ffffff;
+
+      .field-name {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container-buttons {
+        display: flex;
+        flex-direction: column;
+
+        .btn {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}

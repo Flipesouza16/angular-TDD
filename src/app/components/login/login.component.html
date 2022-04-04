@@ -1,0 +1,24 @@
+<div class="container">
+  <form class="form" [formGroup]="formLogin" (ngSubmit)="onSubmit()">
+    <div class="container-fields">
+      <h2 *ngIf="isLogin">Login</h2>
+      <h2 *ngIf="!isLogin">Cadastrar</h2>
+      <div *ngIf="!isLogin" class="field-name">
+        <label>Nome</label>
+        <input type="text" id="name" formControlName="name" required />
+      </div>
+      <label>Email</label>
+      <input type="text" id="email" formControlName="email" required />
+      <label>Senha</label>
+      <input type="password" id="password" formControlName="password" required />
+      <div class="container-buttons" *ngIf="isLogin">
+        <button class="btn" type="submit">Entrar</button>
+        <button class="btn" (click)="toggleLoginRegister()">Não Possui conta?</button>
+      </div>
+      <div class="container-buttons" *ngIf="!isLogin">
+        <button class="btn" type="submit">Cadastrar</button>
+        <button class="btn" (click)="toggleLoginRegister()">Já Possui Conta?</button>
+      </div>
+    </div>
+  </form>
+</div>
