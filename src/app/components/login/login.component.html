@@ -21,12 +21,12 @@
       </div>
 
       <div class="container-buttons" *ngIf="isLogin">
-        <button class="btn" type="submit">Login</button>
-        <button class="btn" (click)="toggleLoginRegister()">Don't have an account?</button>
+        <button [disabled]="isLoading" class="btn" type="submit">Login</button>
+        <button [disabled]="isLoading" class="btn" (click)="toggleLoginRegister()">Don't have an account?</button>
       </div>
       <div class="container-buttons" *ngIf="!isLogin">
-        <button class="btn" type="submit">Register</button>
-        <button class="btn" (click)="toggleLoginRegister()">Already Have Account?</button>
+        <button [disabled]="isLoading" class="btn" type="submit">Register</button>
+        <button [disabled]="isLoading" class="btn" (click)="toggleLoginRegister()">Already Have Account?</button>
       </div>
     </div>
   </form>
