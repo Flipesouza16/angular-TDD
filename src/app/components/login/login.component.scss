@@ -35,6 +35,21 @@
         flex-direction: column;
       }
 
+      .container-info-password {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #b20000;
+        margin-top: 20px;
+
+        span {
+          font-size: 18px;
+          font-weight: bold;
+          color: #a15d5d;
+          padding: 5px;
+        }
+      }
+
       .container-buttons {
         display: flex;
         flex-direction: column;

@@ -2,22 +2,31 @@
   <form class="form" [formGroup]="formLogin" (ngSubmit)="onSubmit()">
     <div class="container-fields">
       <h2 *ngIf="isLogin">Login</h2>
-      <h2 *ngIf="!isLogin">Cadastrar</h2>
+      <h2 *ngIf="!isLogin">Register</h2>
       <div *ngIf="!isLogin" class="field-name">
-        <label class="label">Nome</label>
+        <label class="label">Name</label>
         <input class="input" type="text" id="name" formControlName="name" required />
       </div>
       <label class="label">Email</label>
       <input class="input" type="text" id="email" formControlName="email" required />
-      <label class="label">Senha</label>
+      <label class="label">Password</label>
       <input class="input" type="password" id="password" formControlName="password" required />
+
+      <div class="container-info-password">
+        <span>The password must contain at least 1 lowercase alphabetical character</span>
+        <span>The password must contain at least 1 uppercase alphabetical character</span>
+        <span>The password must contain at least 1 numeric character</span>
+        <span>The password must contain at least one special character</span>
+        <span>The password must be eight characters or longer</span>
+      </div>
+
       <div class="container-buttons" *ngIf="isLogin">
-        <button class="btn" type="submit">Entrar</button>
-        <button class="btn" (click)="toggleLoginRegister()">Não Possui conta?</button>
+        <button class="btn" type="submit">Login</button>
+        <button class="btn" (click)="toggleLoginRegister()">Don't have an account?</button>
       </div>
       <div class="container-buttons" *ngIf="!isLogin">
-        <button class="btn" type="submit">Cadastrar</button>
-        <button class="btn" (click)="toggleLoginRegister()">Já Possui Conta?</button>
+        <button class="btn" type="submit">Register</button>
+        <button class="btn" (click)="toggleLoginRegister()">Already Have Account?</button>
       </div>
     </div>
   </form>
