@@ -4,13 +4,13 @@
       <h2 *ngIf="isLogin">Login</h2>
       <h2 *ngIf="!isLogin">Cadastrar</h2>
       <div *ngIf="!isLogin" class="field-name">
-        <label>Nome</label>
-        <input type="text" id="name" formControlName="name" required />
+        <label class="label">Nome</label>
+        <input class="input" type="text" id="name" formControlName="name" required />
       </div>
-      <label>Email</label>
-      <input type="text" id="email" formControlName="email" required />
-      <label>Senha</label>
-      <input type="password" id="password" formControlName="password" required />
+      <label class="label">Email</label>
+      <input class="input" type="text" id="email" formControlName="email" required />
+      <label class="label">Senha</label>
+      <input class="input" type="password" id="password" formControlName="password" required />
       <div class="container-buttons" *ngIf="isLogin">
         <button class="btn" type="submit">Entrar</button>
         <button class="btn" (click)="toggleLoginRegister()">Não Possui conta?</button>
