@@ -9,6 +9,11 @@ enum AuthenticationFields {
   password = 'password',
   id = 'id'
 }
+
+type FullValidationRequirements = {
+  [key: string]: Function
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -101,6 +106,6 @@ export class AuthenticationService {
         const regex = /(?=.{8,})/;
         return regex.test(password);
       },
-    };
+    } as FullValidationRequirements;
   }
 }
