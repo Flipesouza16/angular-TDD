@@ -12,12 +12,12 @@
       <label class="label">Password</label>
       <input class="input" type="password" id="password" formControlName="password" required />
 
-      <div class="container-info-password">
-        <span>The password must contain at least 1 lowercase alphabetical character</span>
-        <span>The password must contain at least 1 uppercase alphabetical character</span>
-        <span>The password must contain at least 1 numeric character</span>
-        <span>The password must contain at least one special character</span>
-        <span>The password must be eight characters or longer</span>
+      <div class="container-info-password" *ngIf="isPasswordInvalid">
+        <span [class.fieldValid]="fullValidationRequirements.atLeast1Lowercase">The password must contain at least 1 lowercase alphabetical character</span>
+        <span [class.fieldValid]="fullValidationRequirements.atLeast1Uppercase">The password must contain at least 1 uppercase alphabetical character</span>
+        <span [class.fieldValid]="fullValidationRequirements.atLeast1numeric">The password must contain at least 1 numeric character</span>
+        <span [class.fieldValid]="fullValidationRequirements.atLeast1Special">The password must contain at least one special character</span>
+        <span [class.fieldValid]="fullValidationRequirements.mustBe8CharactersOrLonger">The password must be eight characters or longer</span>
       </div>
 
       <div class="container-buttons" *ngIf="isLogin">

@@ -12,20 +12,28 @@ import { AuthenticationService } from "./services/authentication.service";
 export class LoginComponent implements OnInit {
   public isLogin = true;
   public formLogin: FormGroup;
+  public isPasswordInvalid = false;
+  public fullValidationRequirements: any = {
+    atLeast1Lowercase: false,
+    atLeast1Uppercase: false,
+    atLeast1numeric: false,
+    atLeast1Special: false,
+    mustBe8CharactersOrLonger: false,
+  };
 
   constructor(private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
    this.formLogin = this.formBuilder.group({
-     email: [null, [Validators.required, Validators.email]],
-     password: [null, [Validators.required, Validators.minLength(8)]],
+     email: ['', [Validators.required, Validators.email]],
+     password: ['', [Validators.required, Validators.minLength(8)]],
    });
   }
 
   toggleLoginRegister(): void {
     this.isLogin = !this.isLogin;
     if(!this.isLogin) {
-      this.formLogin.addControl('name', new FormControl(null, [Validators.required]));
+      this.formLogin.addControl('name', new FormControl('', [Validators.required]));
     } else {
       this.formLogin.removeControl('name');
     }
@@ -61,7 +69,26 @@ export class LoginComponent implements OnInit {
         break;
       }
     }
+
+    this.validateEachStageOfPassword();
+
     invalidField && this.openSnackBar(`The ${invalidField} field is invalid`);
+  }
+
+  validateEachStageOfPassword(): void {
+    const formControls = this.formLogin.controls;
+    const password = formControls['password'].value;
+    const typesOfValidationOfPassword = Object.keys(this.authenticationService.fullValidationRequirements(password));
+    this.isPasswordInvalid = false;
+
+    for(const stageValidationPassword of typesOfValidationOfPassword) {
+      const isPasswordStageValid = this.authenticationService.fullValidationRequirements(password)[stageValidationPassword]();
+      if(isPasswordStageValid) {
+        this.fullValidationRequirements[stageValidationPassword] = true;
+      } else {
+        this.isPasswordInvalid = true;
+      }
+    }
   }
 
   openSnackBar(message: string, duration = 2000): void {
