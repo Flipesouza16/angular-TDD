@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { AuthenticationParams } from 'src/domain/useCases/authentication';
 import { CheckedFieldsType } from '../interfaces/authentication-validation';
 import { HttpClientService } from 'src/infra/http-client-service';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 
 enum AuthenticationFields {
   firstName = 'firstname',
@@ -79,5 +77,30 @@ export class AuthenticationService {
   validatePassowrdStrength(password: string): boolean {
     var mediumRegex = /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/;
     return mediumRegex.test(password);
+  }
+
+  fullValidationRequirements(password: string) {
+    return {
+      atLeast1Lowercase: () => {
+        const regex = /(?=.*[a-z])/;
+        return regex.test(password);
+      },
+      atLeast1Uppercase: () => {
+        const regex = /(?=.*[A-Z])/;
+        return regex.test(password);
+      },
+      atLeast1numeric: () => {
+        const regex = /(?=.*[0-9])/;
+        return regex.test(password);
+      },
+      atLeast1Special: () => {
+        const regex = /(?=.*[!@#$%^&*])/;
+        return regex.test(password);
+      },
+      mustBe8CharactersOrLonger: () => {
+        const regex = /(?=.{8,})/;
+        return regex.test(password);
+      },
+    };
   }
 }
