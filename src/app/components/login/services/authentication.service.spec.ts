@@ -88,7 +88,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return true if the password contain at least 1 lowercase character`, () => {
     const mockPassword = 'asd'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).atLeast1Lowercase();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['atLeast1Lowercase']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} contain at least 1 lowercase`)
       .toBe(true);
@@ -96,7 +96,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return false if the password does not contain at least 1 lowercase character`, () => {
     const mockPassword = 'ASDA'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).atLeast1Lowercase();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['atLeast1Lowercase']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} does not contain at least 1 lowercase`)
       .toBe(false);
@@ -104,7 +104,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return true if the password contain at least 1 uppercase character`, () => {
     const mockPassword = 'ASDA'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).atLeast1Uppercase();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['atLeast1Uppercase']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} contain at least 1 uppercase`)
       .toBe(true);
@@ -112,7 +112,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return false if the password does not contain at least 1 uppercase character`, () => {
     const mockPassword = 'qwe'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).atLeast1Uppercase();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['atLeast1Uppercase']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} does not contain at least 1 uppercase`)
       .toBe(false);
@@ -120,7 +120,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return true if the password contain at least 1 numeric character`, () => {
     const mockPassword = 'asd1'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).atLeast1numeric();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['atLeast1numeric']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} contain at least 1 numeric`)
       .toBe(true);
@@ -128,7 +128,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return false if the password does not contain at least 1 numeric character`, () => {
     const mockPassword = 'qwe'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).atLeast1numeric();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['atLeast1numeric']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} does not contain at least 1 numeric`)
       .toBe(false);
@@ -136,7 +136,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return true if the password contain at least 1 special character`, () => {
     const mockPassword = 'asd1*'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).atLeast1Special();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['atLeast1Special']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} contain at least 1 special`)
       .toBe(true);
@@ -144,7 +144,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return false if the password does not contain at least 1 special character`, () => {
     const mockPassword = 'qwe'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).atLeast1Special();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['atLeast1Special']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} does not contain at least 1 special character`)
       .toBe(false);
@@ -152,7 +152,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return true if the password contain at least 8 characteres`, () => {
     const mockPassword = 'asd123as'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).mustBe8CharactersOrLonger();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['mustBe8CharactersOrLonger']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} contain at least 8 characteres`)
       .toBe(true);
@@ -160,7 +160,7 @@ describe(`#${AuthenticationService.name}`, () => {
 
   it(`#${AuthenticationService.prototype.fullValidationRequirements} Should return false if the password does not contain at least 8 characteres`, () => {
     const mockPassword = 'qwe'
-    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword).mustBe8CharactersOrLonger();
+    const isAtLeast1Lowercase = service.fullValidationRequirements(mockPassword)['mustBe8CharactersOrLonger']();
     expect(isAtLeast1Lowercase)
       .withContext(`Password ${mockPassword} does not contain at least 8 characteres`)
       .toBe(false);
