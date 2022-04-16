@@ -28,6 +28,16 @@ export class AuthenticationService {
     register: '/users'
   };
   public checkedFields = false;
+  public isPasswordInvalid = false;
+  public validationRequirements: any = {
+    atLeast1Lowercase: false,
+    atLeast1Uppercase: false,
+    atLeast1numeric: false,
+    atLeast1Special: false,
+    mustBe8CharactersOrLonger: false,
+  };
+
+  public validatedPassword = false;
 
   constructor(private httpClientService: HttpClientService) {}
 
@@ -68,6 +78,12 @@ export class AuthenticationService {
 
     this.checkedFields = true;
 
+    this.checkIfPasswordIsInvalid(params.password);
+
+    if(this.isPasswordInvalid) {
+      fieldInvalid = AuthenticationFields.password;
+    }
+
     return {
       isAllFieldsFilledAndValidated,
       fieldInvalid
@@ -107,5 +123,23 @@ export class AuthenticationService {
         return regex.test(password);
       },
     } as FullValidationRequirements;
+  }
+
+   checkIfPasswordIsInvalid(password: string): boolean {
+    const typesOfValidationOfPassword = Object.keys(this.fullValidationRequirements(password));
+    this.isPasswordInvalid = false;
+
+    for(const stageValidationPassword of typesOfValidationOfPassword) {
+      const isPasswordStageValid = this.fullValidationRequirements(password)[stageValidationPassword]();
+      if(isPasswordStageValid) {
+        this.validationRequirements[stageValidationPassword] = true;
+      } else {
+        this.validationRequirements[stageValidationPassword] = false;
+        this.isPasswordInvalid = true;
+      }
+    }
+
+    this.validatedPassword = true;
+    return this.isPasswordInvalid;
   }
 }

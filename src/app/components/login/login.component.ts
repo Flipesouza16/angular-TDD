@@ -67,24 +67,16 @@ export class LoginComponent implements OnInit {
   }
 
   validateEachStageOfPassword(isRegister = false, invalidField?: string): void {
-    const formControls = this.formLogin.controls;
-    const password = formControls['password'].value;
-    const typesOfValidationOfPassword = Object.keys(this.authenticationService.fullValidationRequirements(password));
-    this.isPasswordInvalid = false;
-
-    for(const stageValidationPassword of typesOfValidationOfPassword) {
-      const isPasswordStageValid = this.authenticationService.fullValidationRequirements(password)[stageValidationPassword]();
-      if(isPasswordStageValid) {
-        this.fullValidationRequirements[stageValidationPassword] = true;
-      } else {
-        this.fullValidationRequirements[stageValidationPassword] = false;
-        this.isPasswordInvalid = true;
-      }
-    }
+    const password = this.formLogin.controls['password'].value;
+    this.isFormInvalid = false;
+    this.isPasswordInvalid = this.authenticationService.checkIfPasswordIsInvalid(password);
+    this.fullValidationRequirements = this.authenticationService.validationRequirements;
 
     if(invalidField !== 'password' && this.isPasswordInvalid ) {
-      isRegister && this.openSnackBar(`The password field is invalid`);
-      this.isFormInvalid = true;
+      if(isRegister) {
+        this.openSnackBar(`The password field is invalid`);
+        this.isFormInvalid = true;
+      }
     }
   }
 
