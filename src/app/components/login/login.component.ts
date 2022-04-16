@@ -62,11 +62,11 @@ export class LoginComponent implements OnInit {
       this.isFormInvalid = true;
     }
 
-    this.validateEachStageOfPassword(invalidField);
+    this.validateEachStageOfPassword(true, invalidField);
     invalidField && this.openSnackBar(`The ${invalidField} field is invalid`);
   }
 
-  validateEachStageOfPassword(invalidField: string): void {
+  validateEachStageOfPassword(isRegister = false, invalidField?: string): void {
     const formControls = this.formLogin.controls;
     const password = formControls['password'].value;
     const typesOfValidationOfPassword = Object.keys(this.authenticationService.fullValidationRequirements(password));
@@ -83,8 +83,14 @@ export class LoginComponent implements OnInit {
     }
 
     if(invalidField !== 'password' && this.isPasswordInvalid ) {
-      this.openSnackBar(`The password field is invalid`);
+      isRegister && this.openSnackBar(`The password field is invalid`);
       this.isFormInvalid = true;
+    }
+  }
+
+  checkIfPasswordIsValid(event: any) {
+    if(event.target.value) {
+      this.validateEachStageOfPassword();
     }
   }
 
@@ -119,11 +125,8 @@ export class LoginComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    console.log('this.formLogin.valid: ',this.formLogin.valid);
     if(this.isLogin) {
-      console.log('isLogin: ',this.formLogin);
     } else {
-      console.log('isRegister: ',this.formLogin);
       await this.register();
     }
   }
