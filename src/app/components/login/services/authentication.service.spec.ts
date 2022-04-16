@@ -173,6 +173,18 @@ describe(`#${AuthenticationService.name}`, () => {
       .toBeTrue();
   })
 
+  it(`#Should return true for all password validation cases before calling register function`, () => {
+    const mockPassword = 'Asenha123*'
+    service.checkIfPasswordIsInvalid(mockPassword);
+    expect(service.isPasswordInvalid).toBeFalse();
+  })
+
+  it(`#Should call the checkIfPasswordIsInvalid function before the HttpPostClient Register function`, () => {
+    const mockPassword = 'Asenha123*'
+    service.checkIfPasswordIsInvalid(mockPassword);
+    expect(service.checkedPassword).toBeTrue();
+  })
+
   it(`#${AuthenticationService.prototype.verifyAllField} Should return true if all field of login are filled and validated`, () => {
     const { fieldInvalid, isAllFieldsFilledAndValidated } = service.verifyAllField(mockBodyLogin);
     expect(isAllFieldsFilledAndValidated)

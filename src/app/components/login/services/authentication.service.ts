@@ -37,7 +37,7 @@ export class AuthenticationService {
     mustBe8CharactersOrLonger: false,
   };
 
-  public validatedPassword = false;
+  public checkedPassword = false;
 
   constructor(private httpClientService: HttpClientService) {}
 
@@ -139,7 +139,7 @@ export class AuthenticationService {
       }
     }
 
-    this.validatedPassword = true;
+    this.checkedPassword = true;
     return this.isPasswordInvalid;
   }
 }
