@@ -45,11 +45,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  validateForm(): void {
+  validateForm({ isRegister = true }): void {
     let invalidField = '';
     const formControls = this.formLogin.controls;
     for(const nameField in formControls) {
-      if(formControls['name'].invalid) {
+      if(formControls['name']?.invalid) {
         invalidField = 'name';
         break;
       } else if(formControls[nameField].invalid) {
@@ -62,7 +62,10 @@ export class LoginComponent implements OnInit {
       this.isFormInvalid = true;
     }
 
-    this.validateEachStageOfPassword(true, invalidField);
+    if(isRegister) {
+      this.validateEachStageOfPassword(true, invalidField);
+    }
+
     invalidField && this.openSnackBar(`The ${invalidField} field is invalid`);
   }
 
@@ -93,7 +96,7 @@ export class LoginComponent implements OnInit {
   }
 
   async register() {
-    this.validateForm();
+    this.validateForm({ isRegister: true });
     if(!this.isFormInvalid) {
       const authenticationParams: AuthenticationParams = {
         firstname: this.formLogin.get('name')?.value,
@@ -116,8 +119,37 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  async login() {
+    this.validateForm({ isRegister: false });
+    try {
+      const authenticationParams: AuthenticationParams = {
+        email: this.formLogin.get('email')?.value,
+        password: this.formLogin.get('password')?.value
+      }
+      this.isLoading = true;
+      const response = await this.authenticationService.login(authenticationParams);
+      console.log('response: ',response);
+      this.openSnackBar('Logged successfully!');
+      setTimeout(() => {
+        window.location.reload();
+        this.isLoading = false;
+      }, 1000)
+    } catch(error: any) {
+      this.isLoading = false;
+      console.error(error.message);
+      const invalidField = error.message;
+
+      if(invalidField.length) {
+        invalidField && this.openSnackBar(`The ${invalidField} field is invalid`);
+      } else {
+        this.openSnackBar(`The email or password is invalid`);
+      }
+    }
+  }
+
   async onSubmit(): Promise<void> {
     if(this.isLogin) {
+      await this.login();
     } else {
       await this.register();
     }

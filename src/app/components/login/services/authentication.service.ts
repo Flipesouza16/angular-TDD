@@ -42,7 +42,7 @@ export class AuthenticationService {
   constructor(private httpClientService: HttpClientService) {}
 
   async login(params: AuthenticationParams): Promise<any> {
-    const { fieldInvalid, isAllFieldsFilledAndValidated } = this.verifyAllField(params);
+    const { fieldInvalid, isAllFieldsFilledAndValidated } = this.verifyAllField(params, false);
     if(isAllFieldsFilledAndValidated) {
       const { body } = await this.httpClientService.post({ url: this.endPoint.login, body: params });
       return body;
@@ -61,7 +61,7 @@ export class AuthenticationService {
     }
   }
 
-  verifyAllField(params: AuthenticationParams): CheckedFieldsType {
+  verifyAllField(params: AuthenticationParams, isRegister = true): CheckedFieldsType {
     let fieldInvalid: any;
     let isAllFieldsFilledAndValidated = true;
 
@@ -78,7 +78,7 @@ export class AuthenticationService {
 
     this.checkedFields = true;
 
-    this.checkIfPasswordIsInvalid(params.password);
+    isRegister && this.checkIfPasswordIsInvalid(params.password);
 
     if(this.isPasswordInvalid) {
       fieldInvalid = AuthenticationFields.password;

@@ -12,7 +12,7 @@
       <label class="label">Password</label>
       <input class="input" type="password" id="password" formControlName="password" (input)="checkIfPasswordIsValid($event)" required />
 
-      <div class="container-info-password" *ngIf="isPasswordInvalid">
+      <div class="container-info-password" *ngIf="isPasswordInvalid && !isLogin">
         <span [class.fieldValid]="fullValidationRequirements.atLeast1Lowercase">The password must contain at least 1 lowercase alphabetical character</span>
         <span [class.fieldValid]="fullValidationRequirements.atLeast1Uppercase">The password must contain at least 1 uppercase alphabetical character</span>
         <span [class.fieldValid]="fullValidationRequirements.atLeast1numeric">The password must contain at least 1 numeric character</span>
