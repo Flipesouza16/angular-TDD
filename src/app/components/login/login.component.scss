@@ -71,8 +71,15 @@
           cursor: pointer;
         }
 
+        .btn[disabled] {
+          background-color: #8b54a579;
+        }
+
         .btn:last-of-type {
           background-color: #a55479;
+          &[disabled] {
+            background-color: #a554788f;
+          }
         }
       }
     }

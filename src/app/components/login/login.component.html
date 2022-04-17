@@ -21,11 +21,11 @@
       </div>
 
       <div class="container-buttons" *ngIf="isLogin">
-        <button [disabled]="isLoading" class="btn" type="submit">Login</button>
+        <button [disabled]="isLoading || !isAllFieldFilled" class="btn login-btn" type="submit">Login</button>
         <button [disabled]="isLoading" class="btn" (click)="toggleLoginRegister()">Don't have an account?</button>
       </div>
       <div class="container-buttons" *ngIf="!isLogin">
-        <button [disabled]="isLoading" class="btn" type="submit">Register</button>
+        <button [disabled]="isLoading || !isAllFieldFilled" class="btn register-btn" type="submit">Register</button>
         <button [disabled]="isLoading" class="btn" (click)="toggleLoginRegister()">Already Have Account?</button>
       </div>
     </div>

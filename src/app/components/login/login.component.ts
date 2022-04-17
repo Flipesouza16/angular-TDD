@@ -147,6 +147,16 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  get isAllFieldFilled() {
+    let allFieldsFilled = true;
+    for(const field in this.formLogin.controls) {
+      if(!this.formLogin.controls[field]?.value?.length) {
+        allFieldsFilled = false;
+      }
+    }
+    return allFieldsFilled;
+  }
+
   async onSubmit(): Promise<void> {
     if(this.isLogin) {
       await this.login();
